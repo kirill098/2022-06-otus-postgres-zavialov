@@ -4,28 +4,32 @@
 > 2) deadlock_timeout 200 (без указания единицы измерения, по дефолту - миллисекунды). 
 2. Рестартуем кластер     
 > sudo pg_ctlcluster 14 main restart      
-3. Ситуация возникновения логов:  
-> 1) Создаем б/д: create database locks;
-> 2) Создаем таблицу:   
-> create table accounts(  
->  acc_no integer PRIMARY KEY,  
->  amount numeric);  
-> 3) Вставляем строки   
-> insert into accounts VALUES (1,1000.00), (2,2000.00), (3,3000.00);  
-> 4) 
-> В первой сессии:   
-> begin;       
-> lock table accounts;  
-> Во второй сессии:   
-> begin;  
-> update accounts set amount = 777 where acc_no = 1;  
-> Затем закрываем транзакцию в первой сессии, после. - во второй.  
-> Лог:    
+3. Ситуация возникновения логов:    
+3.1 Подготавливаем окружение   
+Создаем б/д: create database locks;  
+Создаем таблицу: create table accounts(acc_no integer PRIMARY KEY, amount numeric);  
+Вставляем строки: insert into accounts VALUES (1,1000.00), (2,2000.00), (3,3000.00);  
+3.2 Набор команд     
+<I>В первой сессии:</I>   
+begin;       
+lock table accounts;  
+<I>Во второй сессии:</I>   
+begin;  
+update accounts set amount = 777 where acc_no = 1;  
+Затем закрываем транзакцию в первой сессии, после - во второй.    
+Первая сессия блокирует доступ к таблице accounts. Вторая сессия ожидает снятия блокировки. При ожидании более 200 мс происходит запись в лог.     
+
+3.3 Логи      
 > 2022-05-31 18:27:26.778 UTC [1090] postgres@locks LOG:  process 1090 still waiting for RowExclusiveLock on relation 16385 of database 16384 after 200.118 ms at character 8   
 > 2022-05-31 18:27:26.778 UTC [1090] postgres@locks DETAIL:  Process holding the lock: 1089. Wait queue: 1090.    
 > 2022-05-31 18:27:26.778 UTC [1090] postgres@locks STATEMENT:  update accounts set amount = 777 where acc_no = 1;     
 > 2022-05-31 18:27:48.257 UTC [1090] postgres@locks LOG:  process 1090 acquired RowExclusiveLock on relation 16385 of database 16384 after 21679.927 ms at character 8   
-> 2022-05-31 18:27:48.257 UTC [1090] postgres@locks STATEMENT:  update accounts set amount = 777 where acc_no = 1;      
+> 2022-05-31 18:27:48.257 UTC [1090] postgres@locks STATEMENT:  update accounts set amount = 777 where acc_no = 1;
+
+Процесс 1090 ждет исключительной блокировки над объектом c id=16385, расположеной в базе данных с id=16384, спустя 200.118 мс.    
+Процесс ожидает разблокировки процессом 1089.     
+Процесс 1090 получил исключительну блокировку над оъектом с id=16385, расположеной в базе данных с id=16384, спустя 21679.927 мс.    
+
 4. Ситуация с тремя апдейтами  
 > Лог:  
 > 2022-05-31 19:54:19.245 UTC [2509] postgres@locks LOG:  process 2509 still waiting for ShareLock on transaction 743 after 200.103 ms.    
@@ -36,18 +40,14 @@
 > 2022-05-31 19:54:21.608 UTC [2586] postgres@locks DETAIL:  Process holding the lock: 2509. Wait queue: 2586.  
 > 2022-05-31 19:54:21.608 UTC [2586] postgres@locks STATEMENT:  UPDATE accounts SET amount = amount + 100 WHERE acc_no = 1;        
 
-Блокировки:      
-locktype  |       mode       | granted | pid  | wait_for     
-----------+------------------+---------+------+----------    
- relation | RowExclusiveLock | t       | 2509 | {2462}        
- relation | RowExclusiveLock | t       | 2462 | {}      
- relation | RowExclusiveLock | t       | 2586 | {2509}     
- tuple    | ExclusiveLock    | t       | 2509 | {2462}     
- tuple    | ExclusiveLock    | f       | 2586 | {2509}. 
- 
- RowExclusiveLock - исключительная блокировка
- Транзакция 2462 владеет блокировкой, затем 2509 - ждет разбловкировки, а за ней 2586. 
- Так как образовался список ожидающих разблокировки строки, то появился tuple.
+Блокировки:     
+
+<img src="https://github.com/kirill098/otus_homework/blob/main/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D1%8F%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%237/data/photo1.png"> 
+
+  
+ RowExclusiveLock - исключительная блокировка   
+ Транзакция 2462 владеет блокировкой, затем 2509 - ждет разбловкировки, а за ней 2586.   
+ Так как образовался список ожидающих разблокировки строки, то появился tuple.  
    
 Первая транзакция:    
    locktype    |   relation    | virtxid | xid |       mode       | granted     
