@@ -78,6 +78,6 @@ locktype  |       mode       | granted | pid  | wait_for
  virtualxid    |               | 4/9     |     | ExclusiveLock    | t   
  tuple         | accounts      |         |     | ExclusiveLock    | f     
  transactionid |               |         | 745 | ExclusiveLock    | t  
-Ожидание в очереди снятя блокировки, доступа к таблице нет.     
+Ожидание в очереди снятия блокировки, доступа к таблице нет.     
 
 5. 
