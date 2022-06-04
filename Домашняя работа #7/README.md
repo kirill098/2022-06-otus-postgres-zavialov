@@ -18,7 +18,6 @@ begin;
 update accounts set amount = 777 where acc_no = 1;  
 Затем закрываем транзакцию в первой сессии, после - во второй.    
 Первая сессия блокирует доступ к таблице accounts. Вторая сессия ожидает снятия блокировки. При ожидании более 200 мс происходит запись в лог.     
-
 3.3 Логи      
 > 2022-05-31 18:27:26.778 UTC [1090] postgres@locks LOG:  process 1090 still waiting for RowExclusiveLock on relation 16385 of database 16384 after 200.118 ms at character 8   
 > 2022-05-31 18:27:26.778 UTC [1090] postgres@locks DETAIL:  Process holding the lock: 1089. Wait queue: 1090.    
