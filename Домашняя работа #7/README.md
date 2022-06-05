@@ -103,3 +103,8 @@ CONTEXT:  while updating tuple (0,8) in relation "accounts"
 	Process 1818: update accounts set amount = 1 where acc_no = 2;  
 	Process 1833: update accounts set amount = 1 where acc_no = 3;  
 2022-06-05 09:20:29.742 UTC [1826] postgres@locks HINT:  See server log for query details.  
+
+ <B>4. Могут ли две транзакции, выполняющие единственную команду UPDATE одной
+и той же таблицы (без where), заблокировать друг друга?</B>
+
+Да, могут, если обновление таблицы будет происходить в одной транзакции в прямом порядке, а у другой - в обратном.
