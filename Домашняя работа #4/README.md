@@ -26,8 +26,10 @@
 > create user testread password 'test123';
 13. дайте роль readonly пользователю testread
 > grant readonly to testread;
-14. зайдите под пользователем testread в базу данных testdb
-> sudo -u postgres psql -U testread -h 127.0.0.1 -p 5433 -W -d testdb
+14. зайдите под пользователем testread в базу данных testdb.     
+Не получается, так как у пользователя нет прав на вход: "login".   
+ALTER USER testread LOGIN;      
+sudo -u postgres psql -U testread -h 127.0.0.1 -p 5433 -W -d testdb
 15. сделайте select * from t1;
 > 1
 16. получилось? (могло если вы делали сами не по шпаргалке и не упустили один существенный момент про
