@@ -1,3 +1,10 @@
+### Общая информация ###
+* Ссылка на GitHub: https://github.com/kirill098/otus_homewor  
+* Ссылка на Yandex Cloud: https://console.cloud.yandex.ru/folders/b1gehjktlatslseel5bh/compute/instances  
+* Права для пользователя ifti@yandex.ru выдал
+
+### Порядок выполнения: ###
+
 1. Запустил pgbench -c8 -P 60 -T 600 -U postgres postgres.   
 Получил результат:   
 
