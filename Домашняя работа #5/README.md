@@ -8,7 +8,7 @@
 1. Запустил pgbench -c8 -P 60 -T 600 -U postgres postgres.   
 Получил результат:   
 
-![description1](https://github.com/kirill098/otus_homework/blob/main/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D1%8F%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%235/data/before.png?raw=true)
+<img width="500" height="400" src="https://github.com/kirill098/otus_homework/blob/main/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D1%8F%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%235/data/before.png?raw=true">
 
 2. Внес изменения в параметры работы avtovacuum:  
 	•	log_autovacuum_min_duration = 0.     
@@ -22,4 +22,4 @@
 3. Запустил pgbench -c8 -P 60 -T 600 -U postgres postgres.   
 Получил результат:   
 
-![description2](https://github.com/kirill098/otus_homework/blob/main/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D1%8F%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%235/data/after.png?raw=true)
+<img width="500" height="400" src="https://github.com/kirill098/otus_homework/blob/main/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D1%8F%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%235/data/after.png?raw=true">
