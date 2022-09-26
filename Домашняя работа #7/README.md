@@ -1,11 +1,19 @@
-0. Включим запись логов и изменим время ожидания блокировки, превышение которого приводит к записи в лог:    
-В файле настроек postgresql.conf изменим два параметра:  
-> 1) log_lock_waits on. 
-> 2) deadlock_timeout 200 (без указания единицы измерения, по дефолту - миллисекунды). 
-Рестартуем кластер     
-> sudo pg_ctlcluster 14 main restart      
+### Общая информация ###
+* Ссылка на GitHub: https://github.com/kirill098/otus_homewor  
+* Ссылка на Yandex Cloud: https://console.cloud.yandex.ru/folders/b1gehjktlatslseel5bh/compute/instances  
+* Права для пользователя ifti@yandex.ru выдал
 
-Подготавливаем окружение   
+### Порядок выполнения: ###
+
+0) Включим запись логов и изменим время ожидания блокировки, превышение которого приводит к записи в лог:    
+В файле настроек postgresql.conf изменим два параметра:  
+- alter system set log_lock_waits=on   
+- alter systems set log_min_duration_statement=200;   
+Настройки сохраняются в файл postgresql.auto.conf и являются глобальными.  
+Для того, чтобы они применились, необходимо перечитать конфигурационный файл.    
+select pg_reload_conf();
+
+1) Подготавливаем окружение   
 Создаем б/д: create database locks;  
 Создаем таблицу: create table accounts(acc_no integer PRIMARY KEY, amount numeric);  
 Вставляем строки: insert into accounts VALUES (1,1000.00), (2,2000.00), (3,3000.00); 
