@@ -1,8 +1,9 @@
-Ссылка на GitHub: https://github.com/kirill098/otus_homewor  
-Ссылка на Yandex Cloud: https://console.cloud.yandex.ru/folders/b1gcd9q9knvqpk0jmnm0/compute/instances  
-Права для пользователя ifti@yandex.ru выдал
+### Общая информация ###
+* Ссылка на GitHub: https://github.com/kirill098/otus_homewor  
+* Ссылка на Yandex Cloud: https://console.cloud.yandex.ru/folders/b1gehjktlatslseel5bh/compute/instances  
+* Права для пользователя ifti@yandex.ru выдал
 
-Порядок выполнения: 
+### Порядок выполнения: ###
 
 1. Заданы настройки в файле postgresql.conf
 - checkpoint_timeout = 30s
