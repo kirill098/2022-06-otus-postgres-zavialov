@@ -64,7 +64,12 @@
   - select s.id, name, course, subject, course from student s    
     full join exam e    
     on s.id = e.student_id;   
-5.      
-    
-
-
+5. Реализовать запрос, в котором будут использованы разные типы соединений
+-  Необходимо найти всех студентов, которые не сдавали экзамены либо сдали на неудовлетворительную оценку основной предмет  
+    - select s.name, s.course, e.subject, e.mark from student s   
+    left join exam e    
+    on s.id = e.student_id and     
+    e.mark < 3     
+    full join base_subject bs    
+    on e.subject =  bs.name     
+    order by e.subject, s.course, e.mark;
