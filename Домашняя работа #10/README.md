@@ -5,41 +5,34 @@
 
 ### Порядок выполнения: ###
 
-1) Создал кластер #1: имя main, port 5432, + б/д db1
-2) Создал кластер #2: имя main2, port 5433, + б/д db2
-3) Создал кластер #3: имя main3, port 5434, без дополнительной б/д
-4) Манипуляции с кластером #1:    
-+ установить параметр wal_level=logical 
-  - alter system set wal_level=logical  
-+ чтобы настройка применилась необходимо перезагрузить кластер 
-  - sudo pg_ctlcluster 14 main restart       
-+ т.к. взаимодействие происходит на одной ВМ между разными кластерами, то параметр listen_adresses=localhost (по умолчанию) оставляем без изменений  
-+ задаем пароль для пользователя postgres(123)    
-+ создаем таблицы: 
-  - create table test(i int, name text);  
-  - create table test2(i int, name text);
-  - в обеих таблицах добавляем уникальный индекс на поле i
-+ создаем публикацию на таблицу test
-  - create publication db1_test_pub for table test;
-+ после создания кластера #2 подписаться на таблицу db2.test2 из db1
-  - CREATE SUBSCRIPTION sub_db1_test2_to_db2_test2     
-CONNECTION 'host=localhost port=5433 user=postgres password=123 dbname=db2'     
-PUBLICATION db2_test_pub WITH (copy_data = false);   
-5) Манипуляции с кластером #2:    
-Аналогичные симметричные действия как в п.4
-6) Манипуляция с кластером #3:
-+ Останавливаем кластер
-  - sudo pg_ctlcluster 14 main3 stop
-+ удаляем данные кластера
-  - sudo rm -rf /var/lib/postgresql/14/main3
-+ создаем бэкап кластера #1
-  - sudo -u postgres pg_basebackup -p 5432 -R -D /var/lib/postgresql/14/main3
-+ запускаем кластер
-  - sudo pg_ctlcluster 14 main3 start
-### Итог ###
-1. Реализована логическая репликация между db1.test -> db2.test, db2.test2 -> db1.test2
-2. Физическая репликация реализована только кластера #1, т.к. переносится весь кластер вместе с DDL
-3. При записи в db1.test данные записываюся в db2.test и третий кластер db1.test
-4. При записи в db2.test2 данные записываются в db1.test2
+#### 1. Выбор темы домашнего задания: применение на практике различных вариантов соединений таблиц ####
+#### 2. Выполнение ####
+0. Подготовка тестовых данных:
+- создание таблицы student   
+  - create table student(id int, name text, course text);
+- наполнение таблицы student тестовыми данными     
+  - insert into student(id, name, course)   
+    select id, ‘student_’ || id, (random()*10)::int % 4 + 1    
+    from generate_series(1, 100) id;   
+- создание таблицы exam   
+  - create table exam(id int, student_id int, mark int, subject text);
+- наполнение таблицы exam тестовыми данными        
+  - insert into exam(id, student_id, mark, subject)    
+    select id, 101-id, (random()*10)::int % 4 +1,     
+    case (id % 5 +1)     
+      when 1 then 'math'     
+      when 2 then 'physics'    
+      when 3 then 'geography'   
+      when 4 then 'chemistry'   
+      when 5 then 'biology'   
+    end    
+    from generate_series(1, 100) id;      
+    
+1. Реализовать прямое соединение двух или более таблиц (inner join)   
+- запрос на соединение двух таблица student и exam по условию student.id = exam.student_id
+  - select student_id, name, course, subject, course from student s    
+    join exam e     
+    on s.id = e.student_id;    
+    
 
 
