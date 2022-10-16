@@ -33,17 +33,38 @@
   - select student_id, name, course, subject, course from student s    
     join exam e     
     on s.id = e.student_id; 
-2. Реализовать левостороннее соединение двух или более таблиц 
+2. Реализовать левостороннее соединение двух или более таблиц (left join)
 - для иллюстрации примера необходимо дополнить таблицу student данными студентов, отсутствующих в таблице exam
-  - insert into student(id, name, course) 
-    select id, 'student_' || id, (random()*10)::int % 4 +1 
-    from generate_series(101, 120) id;   
+  - insert into student(id, name, course)    
+    select id, 'student_' || id, (random()*10)::int % 4 +1     
+    from generate_series(101, 120) id;      
 - запрос на левостороннее соединение таблицы student с exam по условию student.id = exam.student_id
   - select s.id, name, course, subject, course from student s    
     left join exam e     
     on s.id = e.student_id;    
-3.     
-    
+3. Реализовать кросс соединение двух или более таблиц (cross join)
+- запрос на кросс соедение таблицы student и exam
+  - select * from student   
+    cross join  exam;   
+- для проверки правильности запроса - количество строк в результате запрос n*m,    
+  где n - размерность таблицы student(120), m - размерность таблицы exam(100)    
+4. Реализовать полное соединение двух или более таблиц (full join)
+- дополняем таблицу exam значениями студентов, которых нет в таблице student
+- insert into exam(id, student_id, mark, subject)    
+  select id, 300-id, (random()*10)::int % 4 +1,    
+  case (id % 5 +1)   
+    when 1 then 'math'  
+    when 2 then 'physics'   
+    when 3 then 'geography'   
+    when 4 then 'chemistry'   
+    when 5 then 'biology'  
+  end
+  from generate_series(300, 320) id;
+- запрос на полное соединение таблицы student и exam    
+  - select s.id, name, course, subject, course from student s    
+    full join exam e    
+    on s.id = e.student_id;   
+5.      
     
 
 
