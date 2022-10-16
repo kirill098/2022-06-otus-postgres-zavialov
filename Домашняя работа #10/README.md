@@ -32,7 +32,18 @@
 - запрос на соединение двух таблица student и exam по условию student.id = exam.student_id
   - select student_id, name, course, subject, course from student s    
     join exam e     
+    on s.id = e.student_id; 
+2. Реализовать левостороннее соединение двух или более таблиц 
+- для иллюстрации примера необходимо дополнить таблицу student данными студентов, отсутствующих в таблице exam
+  - insert into student(id, name, course) 
+    select id, 'student_' || id, (random()*10)::int % 4 +1 
+    from generate_series(101, 120) id;   
+- запрос на левостороннее соединение таблицы student с exam по условию student.id = exam.student_id
+  - select s.id, name, course, subject, course from student s    
+    left join exam e     
     on s.id = e.student_id;    
+3.     
+    
     
 
 
