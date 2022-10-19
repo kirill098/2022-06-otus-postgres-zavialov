@@ -5,7 +5,7 @@
 
 ### Порядок выполнения: ###
 
-0) подготовительный этап
+0) Подготовительный этап
 - скачиваем тестовую б/д:  wget https://edu.postgrespro.com/demo-small-en.zip
 - распаковываем полученный файл: unzip demo-small-en.zip
 - импортируем в PostgreSQL: psql -U postgres demo < demo-small-en-20170815.sql
@@ -45,7 +45,13 @@
   
 
 4) Заполняем новую секционированную таблицу flights_range значениями из flights.    
-запрос: insert into flights_range select  * from flights;
-проверяем
+  <img src="https://github.com/kirill098/otus_homework/blob/main/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D1%8F%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%2311/data/image3.png">
+
+5) Проверяем заполненность партиций
+  <img src="https://github.com/kirill098/otus_homework/blob/main/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D1%8F%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%2311/data/image6.png">
+  
+6) Навешиваем недостающие ограничения на таблицу flights_range основе таблицы flights   
+  
+  
 
 
