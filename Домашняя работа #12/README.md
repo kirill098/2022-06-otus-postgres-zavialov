@@ -5,7 +5,7 @@
 
 ### Порядок выполнения: ###
 
-0) Подготовительный этап
+0) Подготовительный этап   
 Накатываем скрипты из файла 
 [hw_triggers.sql](https://github.com/kirill098/otus_homework/blob/main/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D1%8F%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%2312/data/hw_triggers.sql)
 
